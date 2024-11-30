@@ -8,6 +8,9 @@ import ProductInfo from './pages/ProductInfo';
 import CartItems from './pages/CartItems';
 import OrdersPage from './pages/Orders';
 import CategoriesPage from './pages/CategoryList';
+import ProductsList from './pages/ProductsList';
+
+
 import './App.css';
 
 function App() {
@@ -22,6 +25,8 @@ function App() {
           <Route path="/cart" element={<CartItems />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/categorylist" element={<CategoriesPage />} />
+          <Route path="/productlist" element={<ProductsList />} />
+
         </Routes>
       </Router>
     </CategoriesProvider>
