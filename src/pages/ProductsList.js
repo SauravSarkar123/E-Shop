@@ -10,14 +10,12 @@ const ProductsList = () => {
   ]);
 
   const toggleStatus = (id) => setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, status: !p.status } : p)));
-
   const truncateText = (text, limit = 5) => text.split(' ').slice(0, limit).join(' ') + (text.split(' ').length > limit ? '...' : '');
 
   return (
     <div className="bg-gray-50 min-h-screen">
       <Header />
       <div className="container mx-auto px-4 py-8">
-        {/* Header Section */}
         <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800">Products List</h1>
           <button className="bg-purple-600 text-white px-4 py-2 rounded-md flex items-center gap-2 shadow-md hover:bg-purple-700">
@@ -27,49 +25,29 @@ const ProductsList = () => {
             Add Products
           </button>
         </div>
-        {/* Table Section */}
         <div className="bg-white shadow-lg rounded-lg overflow-x-auto">
           <table className="min-w-full text-sm text-gray-600">
             <thead className="bg-gray-300 text-gray-700">
-              <tr>
-                {['Image', 'Name', 'Description', 'Price (₹)', 'Stock', 'Sales (₹)', 'Status', 'Actions'].map((h) => (
-                  <th key={h} className="px-4 py-3 text-center font-semibold whitespace-nowrap">
-                    {h}
-                  </th>
-                ))}
-              </tr>
+              <tr>{['Image', 'Name', 'Description', 'Price (₹)', 'Stock', 'Sales (₹)', 'Status', 'Actions'].map((h) => <th key={h} className="px-4 py-3 text-center font-semibold whitespace-nowrap">{h}</th>)}</tr>
             </thead>
             <tbody>
               {products.map(({ id, image, name, description, price, stock, sales, status }) => (
                 <tr key={id} className="hover:bg-gray-100">
-                  <td className="px-4 py-3 text-center">
-                    <img src={image} alt={name} className="w-10 h-10 rounded-md mx-auto" />
-                  </td>
+                  <td className="px-4 py-3 text-center"><img src={image} alt={name} className="w-10 h-10 rounded-md mx-auto" /></td>
                   <td className="px-4 py-3 text-center font-medium">{name}</td>
                   <td className="px-4 py-3 text-center">{truncateText(description)}</td>
                   <td className="px-4 py-3 text-center">{price}</td>
                   <td className="px-4 py-3 text-center">{stock}</td>
                   <td className="px-4 py-3 text-center">{sales.toLocaleString()}</td>
                   <td className="px-4 py-3 text-center">
-                    <button
-                      onClick={() => toggleStatus(id)}
-                      className={`w-10 h-5 rounded-full flex items-center mx-auto ${status ? 'bg-green-500' : 'bg-gray-300'}`}
-                    >
-                      <span
-                        className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
-                          status ? 'translate-x-5' : 'translate-x-0'
-                        }`}
-                      />
+                    <button onClick={() => toggleStatus(id)} className={`w-10 h-5 rounded-full flex items-center mx-auto ${status ? 'bg-green-500' : 'bg-gray-300'}`}>
+                      <span className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${status ? 'translate-x-5' : 'translate-x-0'}`} />
                     </button>
                   </td>
                   <td className="px-4 py-3 text-center">
                     <div className="flex gap-3 justify-center">
-                      <button className="text-blue-500 hover:text-blue-700">
-                        <FaEdit size={18} />
-                      </button>
-                      <button className="text-red-500 hover:text-red-700">
-                        <FaTrash size={18} />
-                      </button>
+                      <button className="text-blue-500 hover:text-blue-700"><FaEdit size={18} /></button>
+                      <button className="text-red-500 hover:text-red-700"><FaTrash size={18} /></button>
                     </div>
                   </td>
                 </tr>
