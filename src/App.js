@@ -9,8 +9,10 @@ import CartItems from './pages/CartItems';
 import OrdersPage from './pages/Orders';
 import CategoriesPage from './pages/CategoryList';
 import ProductsList from './pages/ProductsList';
-
-
+import AddCategory from './pages/AddCategory';
+import UpdateCategory from './pages/UpdateCategory';
+import AddProduct from './pages/AddProduct';
+import UpdateProduct from './pages/UpdateProduct';
 import './App.css';
 
 function App() {
@@ -26,6 +28,11 @@ function App() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/categorylist" element={<CategoriesPage />} />
           <Route path="/productlist" element={<ProductsList />} />
+          <Route path="/addcategory" element={<AddCategory />} />
+          <Route path="/updatecategory" element={<UpdateCategory />} />
+          <Route path="/addproduct" element={<AddProduct />} />
+          <Route path="/updateproduct" element={<UpdateProduct />} />
+
 
         </Routes>
       </Router>
