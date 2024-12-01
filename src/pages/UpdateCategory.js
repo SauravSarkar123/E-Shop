@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import { CategoriesContext } from '../context/CategoriesContext'; // Import the context
 
 const InputField = ({ id, label, type, placeholder, value, error, onChange }) => (
   <div>
@@ -17,14 +19,23 @@ const InputField = ({ id, label, type, placeholder, value, error, onChange }) =>
   </div>
 );
 
-const UpdateCategory = ({ existingData }) => {
-  const [formData, setFormData] = useState({ name: '', imageUrl: '' });
+const UpdateCategory = () => {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  const { categories, updateCategories } = useContext(CategoriesContext); // Access context
+  const [formData, setFormData] = useState({ id: '', name: '', imageUrl: '' });
   const [errors, setErrors] = useState({});
 
-  useEffect(() => { if (existingData) setFormData(existingData); }, [existingData]);
+  useEffect(() => {
+    if (state?.category) {
+      const { id, name, image } = state.category;
+      setFormData({ id, name, imageUrl: image });
+    }
+  }, [state]);
 
   const validateForm = () => {
-    const { name, imageUrl } = formData, newErrors = {};
+    const { name, imageUrl } = formData;
+    const newErrors = {};
     if (!name.trim()) newErrors.name = 'Category name is required.';
     else if (name.trim().length < 3) newErrors.name = 'Category name must be at least 3 characters long.';
     if (!imageUrl.trim()) newErrors.imageUrl = 'Category image URL is required.';
@@ -40,7 +51,15 @@ const UpdateCategory = ({ existingData }) => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) console.log('Updated Data:', formData);
+    if (validateForm()) {
+      const updatedCategories = categories.map((category) =>
+        category.id === formData.id
+          ? { ...category, name: formData.name, image: formData.imageUrl }
+          : category
+      );
+      updateCategories(updatedCategories); // Update the context
+      navigate('/categorylist'); // Navigate back to the categories page after updating
+    }
   };
 
   return (
@@ -49,8 +68,24 @@ const UpdateCategory = ({ existingData }) => {
       <div className="container mx-auto px-4 py-8 md:max-w-lg">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Update Category</h1>
         <form onSubmit={handleFormSubmit} className="space-y-6">
-          <InputField id="name" label="Category Name" type="text" placeholder="Enter category name" value={formData.name} error={errors.name} onChange={handleInputChange} />
-          <InputField id="imageUrl" label="Category Image URL" type="url" placeholder="Enter image URL" value={formData.imageUrl} error={errors.imageUrl} onChange={handleInputChange} />
+          <InputField
+            id="name"
+            label="Category Name"
+            type="text"
+            placeholder="Enter category name"
+            value={formData.name}
+            error={errors.name}
+            onChange={handleInputChange}
+          />
+          <InputField
+            id="imageUrl"
+            label="Category Image URL"
+            type="url"
+            placeholder="Enter image URL"
+            value={formData.imageUrl}
+            error={errors.imageUrl}
+            onChange={handleInputChange}
+          />
           <button type="submit" className="w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-700 transition">Update Category</button>
         </form>
       </div>

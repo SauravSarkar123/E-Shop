@@ -45,12 +45,13 @@ const AddCategory = () => {
         id: categories.length + 1, // Generate a new ID
         name: formData.name,
         image: formData.imageUrl,
+        status: true, // Default status set to true
       };
       updateCategories([...categories, newCategory]); // Update categories
       setFormData({ name: '', imageUrl: '' }); // Clear form
       alert('Category added successfully!');
     }
-  };
+  };  
 
   return (
     <div className="bg-gray-50 min-h-screen">
