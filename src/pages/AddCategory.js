@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { CategoriesContext } from '../context/CategoriesContext'; // Adjust path as needed
 import Header from '../components/Header';
 
 const InputField = ({ id, label, type, placeholder, value, error, onChange }) => (
@@ -18,6 +19,7 @@ const InputField = ({ id, label, type, placeholder, value, error, onChange }) =>
 );
 
 const AddCategory = () => {
+  const { categories, updateCategories } = useContext(CategoriesContext);
   const [formData, setFormData] = useState({ name: '', imageUrl: '' });
   const [errors, setErrors] = useState({});
 
@@ -38,7 +40,16 @@ const AddCategory = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) console.log('Form submitted:', formData);
+    if (validateForm()) {
+      const newCategory = {
+        id: categories.length + 1, // Generate a new ID
+        name: formData.name,
+        image: formData.imageUrl,
+      };
+      updateCategories([...categories, newCategory]); // Update categories
+      setFormData({ name: '', imageUrl: '' }); // Clear form
+      alert('Category added successfully!');
+    }
   };
 
   return (
