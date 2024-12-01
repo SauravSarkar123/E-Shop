@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { CategoriesContext } from '../context/CategoriesContext'; // Adjust path as needed
 import Header from '../components/Header';
-
+import { useNavigate } from 'react-router-dom';
 const InputField = ({ id, label, type, placeholder, value, error, onChange }) => (
   <div>
     <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
@@ -20,6 +20,7 @@ const InputField = ({ id, label, type, placeholder, value, error, onChange }) =>
 
 const AddCategory = () => {
   const { categories, updateCategories } = useContext(CategoriesContext);
+  const navigate = useNavigate(); // Initialize navigate
   const [formData, setFormData] = useState({ name: '', imageUrl: '' });
   const [errors, setErrors] = useState({});
 
@@ -41,18 +42,21 @@ const AddCategory = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const newCategory = {
-        id: categories.length + 1, // Generate a new ID
-        name: formData.name,
-        image: formData.imageUrl,
-        status: true, // Default status set to true
-      };
-      updateCategories([...categories, newCategory]); // Update categories
-      setFormData({ name: '', imageUrl: '' }); // Clear form
-      alert('Category added successfully!');
+      const userConfirmed = window.confirm('Are you sure you want to add this category?');
+      if (userConfirmed) {
+        const newCategory = {
+          id: categories.length + 1, // Generate a new ID
+          name: formData.name,
+          image: formData.imageUrl,
+          status: true, // Default status set to true
+        };
+        updateCategories([...categories, newCategory]); // Update categories
+        setFormData({ name: '', imageUrl: '' }); // Clear form
+        alert('Category added successfully!');
+        navigate('/categorylist'); // Redirect to category list
+      }
     }
-  };  
-
+  }
   return (
     <div className="bg-gray-50 min-h-screen">
       <Header />
