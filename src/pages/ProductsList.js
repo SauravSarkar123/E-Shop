@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
+import { useLocation } from 'react-router-dom'; // Import useLocation to access the passed state.
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import Header from '../components/Header';
-
+import { ProductsContext } from '../context/ProductsContext';
 const ProductsList = () => {
-  const [products, setProducts] = useState([
-    { id: 1, image: 'https://via.placeholder.com/50', name: 'Carrot', description: 'Fresh organic carrots for salads and juicing.', price: 50, stock: 20, sales: 5000, status: true },
-    { id: 2, image: 'https://via.placeholder.com/50', name: 'Apple', description: 'Juicy red apples from the orchard.', price: 150, stock: 15, sales: 3000, status: false },
-    { id: 3, image: 'https://via.placeholder.com/50', name: 'Milk', description: 'Pure creamy cow milk from organic farms.', price: 60, stock: 30, sales: 10000, status: true },
-  ]);
+  const location = useLocation(); // Access location to get the state.
+  const { categoryId } = location.state || {}; // Get the categoryId from state, or fallback to undefined.
+  const { products } = useContext(ProductsContext);
 
-  const toggleStatus = (id) => setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, status: !p.status } : p)));
-  const truncateText = (text, limit = 5) => text.split(' ').slice(0, limit).join(' ') + (text.split(' ').length > limit ? '...' : '');
+  // If no categoryId is passed, show an empty array or handle it gracefully.
+  const filteredProducts = categoryId
+    ? products.filter((product) => product.categoryId === Number(categoryId))
+    : [];
+
+  const truncateText = (text, limit = 5) =>
+    text.split(' ').slice(0, limit).join(' ') + (text.split(' ').length > limit ? '...' : '');
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -28,30 +32,35 @@ const ProductsList = () => {
         <div className="bg-white shadow-lg rounded-lg overflow-x-auto">
           <table className="min-w-full text-sm text-gray-600">
             <thead className="bg-gray-300 text-gray-700">
-              <tr>{['Image', 'Name', 'Description', 'Price (₹)', 'Stock', 'Sales (₹)', 'Status', 'Actions'].map((h) => <th key={h} className="px-4 py-3 text-center font-semibold whitespace-nowrap">{h}</th>)}</tr>
+              <tr>
+                {['Image', 'Name', 'Description', 'Price (₹)', 'Actions'].map((h) => (
+                  <th key={h} className="px-4 py-3 text-center font-semibold whitespace-nowrap">{h}</th>
+                ))}
+              </tr>
             </thead>
             <tbody>
-              {products.map(({ id, image, name, description, price, stock, sales, status }) => (
-                <tr key={id} className="hover:bg-gray-100">
-                  <td className="px-4 py-3 text-center"><img src={image} alt={name} className="w-10 h-10 rounded-md mx-auto" /></td>
-                  <td className="px-4 py-3 text-center font-medium">{name}</td>
-                  <td className="px-4 py-3 text-center">{truncateText(description)}</td>
-                  <td className="px-4 py-3 text-center">{price}</td>
-                  <td className="px-4 py-3 text-center">{stock}</td>
-                  <td className="px-4 py-3 text-center">{sales.toLocaleString()}</td>
-                  <td className="px-4 py-3 text-center">
-                    <button onClick={() => toggleStatus(id)} className={`w-10 h-5 rounded-full flex items-center mx-auto ${status ? 'bg-green-500' : 'bg-gray-300'}`}>
-                      <span className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${status ? 'translate-x-5' : 'translate-x-0'}`} />
-                    </button>
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    <div className="flex gap-3 justify-center">
-                      <button className="text-blue-500 hover:text-blue-700"><FaEdit size={18} /></button>
-                      <button className="text-red-500 hover:text-red-700"><FaTrash size={18} /></button>
-                    </div>
-                  </td>
+              {filteredProducts.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="text-center px-4 py-3">No products found for this category.</td>
                 </tr>
-              ))}
+              ) : (
+                filteredProducts.map(({ id, image, name, description, price }) => (
+                  <tr key={id} className="hover:bg-gray-100">
+                    <td className="px-4 py-3 text-center">
+                      <img src={image} alt={name} className="w-10 h-10 rounded-md mx-auto" />
+                    </td>
+                    <td className="px-4 py-3 text-center font-medium">{name}</td>
+                    <td className="px-4 py-3 text-center">{truncateText(description)}</td>
+                    <td className="px-4 py-3 text-center">{price}</td>
+                    <td className="px-4 py-3 text-center">
+                      <div className="flex gap-3 justify-center">
+                        <button className="text-blue-500 hover:text-blue-700"><FaEdit size={18} /></button>
+                        <button className="text-red-500 hover:text-red-700"><FaTrash size={18} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

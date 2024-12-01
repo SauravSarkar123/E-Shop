@@ -8,24 +8,17 @@ const CategoriesPage = () => {
   const { categories, updateCategories } = useContext(CategoriesContext);
   const navigate = useNavigate();
 
-  const toggleStatus = (id) => {
-    const updatedCategories = categories.map((cat) =>
-      cat.id === id ? { ...cat, status: !cat.status } : cat
+  const toggleStatus = (id) =>
+    updateCategories(
+      categories.map((cat) => (cat.id === id ? { ...cat, status: !cat.status } : cat))
     );
-    updateCategories(updatedCategories);
-  };
 
   const deleteCategory = (id) => {
-    const confirmed = window.confirm('Are you sure you want to delete this category?');
-    if (confirmed) {
-      const updatedCategories = categories.filter((cat) => cat.id !== id);
-      updateCategories(updatedCategories);
-    }
+    if (window.confirm('Are you sure you want to delete this category?'))
+      updateCategories(categories.filter((cat) => cat.id !== id));
   };
 
-  const handleEdit = (category) => {
-    navigate('/updatecategory', { state: { category } });
-  };
+  const handleEdit = (category) => navigate('/updatecategory', { state: { category } });
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -65,7 +58,11 @@ const CategoriesPage = () => {
             </thead>
             <tbody>
               {categories.map(({ id, image, name, stock = 0, sales = 0, status = false }) => (
-                <tr key={id} className="hover:bg-gray-100 transition-colors">
+                <tr
+                  key={id}
+                  className="hover:bg-gray-100 transition-colors cursor-pointer"
+                  onClick={() => navigate('/productlist', { state: { categoryId: id } })}
+                >
                   <td className="px-4 py-3 text-center">
                     <img
                       src={image}
@@ -78,15 +75,16 @@ const CategoriesPage = () => {
                   <td className="px-4 py-3 text-center">₹ {sales.toLocaleString()}</td>
                   <td className="px-4 py-3 text-center">
                     <button
-                      onClick={() => toggleStatus(id)}
-                      className={`w-10 h-5 rounded-full flex items-center mx-auto ${
-                        status ? 'bg-green-500' : 'bg-gray-300'
-                      }`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleStatus(id);
+                      }}
+                      className={`w-10 h-5 rounded-full flex items-center mx-auto ${status ? 'bg-green-500' : 'bg-gray-300'
+                        }`}
                     >
                       <span
-                        className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
-                          status ? 'translate-x-5' : 'translate-x-0'
-                        }`}
+                        className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${status ? 'translate-x-5' : 'translate-x-0'
+                          }`}
                       ></span>
                     </button>
                   </td>
@@ -94,13 +92,19 @@ const CategoriesPage = () => {
                     <div className="flex gap-3 justify-center">
                       <button
                         className="text-blue-500 hover:text-blue-700"
-                        onClick={() => handleEdit({ id, image, name, stock, sales, status })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEdit({ id, image, name, stock, sales, status });
+                        }}
                       >
                         <FaEdit size={18} />
                       </button>
                       <button
                         className="text-red-500 hover:text-red-700"
-                        onClick={() => deleteCategory(id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteCategory(id);
+                        }}
                       >
                         <FaTrash size={18} />
                       </button>
