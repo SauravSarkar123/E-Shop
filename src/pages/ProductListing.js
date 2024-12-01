@@ -3,44 +3,38 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import { ProductsContext } from '../context/ProductsContext';
 import { CategoriesContext } from '../context/CategoriesContext';
+import { CartContext } from '../context/CartContext'; // Import CartContext
 
 const ProductListing = () => {
   const { products } = useContext(ProductsContext);
   const { categories } = useContext(CategoriesContext);
+  const { cart, addToCart, updateQuantity } = useContext(CartContext); // Use CartContext
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const categoryId = searchParams.get('category');
+  const categoryName = searchParams.get('category');
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [cart, setCart] = useState({});
 
   useEffect(() => {
-    if (categoryId) {
-      const filtered = products.filter(
-        (product) => product.categoryId === parseInt(categoryId, 10)
-      );
-      setFilteredProducts(filtered);
+    if (categoryName) {
+      const category = categories.find((cat) => cat.name.toLowerCase() === categoryName.toLowerCase());
+      if (category) {
+        const filtered = products.filter((product) => product.categoryId === category.id);
+        setFilteredProducts(filtered);
+      } else {
+        setFilteredProducts([]); // No matching category found
+      }
     }
-  }, [categoryId, products]);
-
-  const modifyCart = (id, action) =>
-    setCart((prev) => {
-      const quantity = prev[id] || 0;
-      if (action === 'add') return { ...prev, [id]: 1 };
-      if (action === 'increase') return { ...prev, [id]: quantity + 1 };
-      if (action === 'decrease') return quantity > 1 ? { ...prev, [id]: quantity - 1 } : { ...prev, [id]: undefined };
-    });
-
-  const categoryName = categories.find((cat) => cat.id === parseInt(categoryId, 10))?.name || 'Products';
+  }, [categoryName, categories, products]);
 
   const handleProductClick = (product) => {
     navigate(`/productinfo?name=${encodeURIComponent(product.name)}`);
   };
-  
+
   return (
     <div className="bg-gray-100 min-h-screen">
       <Header />
       <div className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold text-black mb-6">{categoryName}</h1>
+        <h1 className="text-2xl font-bold text-black mb-6">{categoryName || 'Products'}</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {filteredProducts.map((product) => (
             <div
@@ -56,19 +50,19 @@ const ProductListing = () => {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      modifyCart(product.id, 'decrease');
+                      updateQuantity(product.id, cart[product.id].quantity - 1); // Decrease quantity
                     }}
                     className="w-10 h-10 bg-red-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-red-600"
                   >
                     -
                   </button>
                   <div className="w-16 h-10 bg-gray-200 rounded-md flex items-center justify-center border border-gray-300 flex-grow">
-                    <span className="text-lg text-gray-800 font-medium">{cart[product.id]}</span>
+                    <span className="text-lg text-gray-800 font-medium">{cart[product.id].quantity}</span>
                   </div>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      modifyCart(product.id, 'increase');
+                      updateQuantity(product.id, cart[product.id].quantity + 1); // Increase quantity
                     }}
                     className="w-10 h-10 bg-green-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-green-600"
                   >
@@ -79,7 +73,7 @@ const ProductListing = () => {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    modifyCart(product.id, 'add');
+                    addToCart(product); // Add to cart
                   }}
                   className="px-4 py-2 bg-purple-500 text-white font-bold rounded-md hover:bg-purple-600 mt-auto"
                 >

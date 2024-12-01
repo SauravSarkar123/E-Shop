@@ -3,14 +3,15 @@ import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { ProductsContext } from '../context/ProductsContext';
 import { CategoriesContext } from '../context/CategoriesContext';
+import { CartContext } from '../context/CartContext'; // Import CartContext
 
 const ProductInfo = () => {
   const { products } = useContext(ProductsContext);
   const { categories } = useContext(CategoriesContext);
+  const { cart, addToCart, updateQuantity } = useContext(CartContext); // Use CartContext
   const [searchParams] = useSearchParams();
   const productName = searchParams.get('name');
   const [product, setProduct] = useState(null);
-  const [cart, setCart] = useState({});
 
   useEffect(() => {
     if (productName) {
@@ -18,18 +19,6 @@ const ProductInfo = () => {
       setProduct(foundProduct);
     }
   }, [productName, products]);
-
-  const modifyCart = (id, action) =>
-    setCart((prev) => {
-      const quantity = prev[id] || 0;
-      return action === 'add'
-        ? { ...prev, [id]: 1 }
-        : action === 'increase'
-        ? { ...prev, [id]: quantity + 1 }
-        : quantity > 1
-        ? { ...prev, [id]: quantity - 1 }
-        : { ...prev, [id]: undefined };
-    });
 
   if (!product) {
     return (
@@ -66,16 +55,16 @@ const ProductInfo = () => {
             {cart[product.id] ? (
               <div className="flex items-center space-x-4">
                 <button
-                  onClick={() => modifyCart(product.id, 'decrease')}
+                  onClick={() => updateQuantity(product.id, cart[product.id].quantity - 1)} // Decrease quantity
                   className="w-10 h-10 bg-red-500 text-white font-bold rounded-md hover:bg-red-600"
                 >
                   -
                 </button>
                 <span className="w-16 h-10 bg-gray-200 border border-gray-300 rounded-md flex items-center justify-center">
-                  {cart[product.id]}
+                  {cart[product.id].quantity}
                 </span>
                 <button
-                  onClick={() => modifyCart(product.id, 'increase')}
+                  onClick={() => updateQuantity(product.id, cart[product.id].quantity + 1)} // Increase quantity
                   className="w-10 h-10 bg-green-500 text-white font-bold rounded-md hover:bg-green-600"
                 >
                   +
@@ -83,7 +72,7 @@ const ProductInfo = () => {
               </div>
             ) : (
               <button
-                onClick={() => modifyCart(product.id, 'add')}
+                onClick={() => addToCart(product)} // Add to cart
                 className="px-6 py-3 bg-purple-500 text-white font-bold rounded-md hover:bg-purple-600"
               >
                 Add to Cart

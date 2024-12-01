@@ -7,8 +7,8 @@ const HomePage = () => {
   const { categories } = useContext(CategoriesContext);
   const navigate = useNavigate();
 
-  const handleCategoryClick = (id) => {
-    navigate(`/products?category=${id}`);
+  const handleCategoryClick = (name) => {
+    navigate(`/products?category=${encodeURIComponent(name)}`);
   };
 
   return (
@@ -21,7 +21,7 @@ const HomePage = () => {
             <div
               key={id}
               className="bg-white rounded-lg shadow-lg p-4 flex flex-col items-center transform transition hover:scale-105 hover:shadow-xl hover:ring-4 hover:ring-blue-300 cursor-pointer"
-              onClick={() => handleCategoryClick(id)}
+              onClick={() => handleCategoryClick(name)}
             >
               <img src={image} alt={name} className="rounded-md w-full h-40 object-cover mb-4" />
               <h2 className="text-lg font-medium text-gray-700">{name}</h2>
