@@ -65,7 +65,7 @@ const initialProducts =
             "name": "Pineapple",
             "categoryId": 2,
             "price": 150,
-            "image": "https://thumbs.dreamstime.com/b/pineapple-slices-isolated-white-30985039.jpg"
+            "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2f9VjghHjJ4USLJx6kgGldITy7Ee1mfwivA&s"
         },
         {
             "id": 116,
