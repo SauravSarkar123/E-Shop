@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Header from '../components/Header';
 import { CartContext } from '../context/CartContext'; // Import CartContext
 import { useOrders } from '../context/OrdersContext'; // Import OrdersContext
@@ -6,6 +7,7 @@ import { useOrders } from '../context/OrdersContext'; // Import OrdersContext
 const CartItems = () => {
   const { cart, updateQuantity, clearCart } = useContext(CartContext);
   const { addOrder } = useOrders();
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const totalPrice = Object.values(cart).reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -30,6 +32,7 @@ const CartItems = () => {
       addOrder(newOrder); // Add the order to OrdersContext
       clearCart(); // Clear the cart
       alert('Order placed successfully!');
+      navigate('/orders'); // Redirect to /orders page
     }
   };
 
