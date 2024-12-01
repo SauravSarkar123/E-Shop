@@ -5,36 +5,39 @@ import Header from '../components/Header';
 import { ProductsContext } from '../context/ProductsContext';
 
 const ProductsList = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { categoryId } = location.state || {};
+  const { state } = useLocation(), { categoryId } = state || {};
   const { products, updateProducts } = useContext(ProductsContext);
+  const navigate = useNavigate();
 
-  // Filter products based on category
   const filteredProducts = categoryId
-    ? products.filter((product) => product.categoryId === Number(categoryId))
+    ? products.filter((p) => p.categoryId === Number(categoryId))
     : [];
 
-  // Toggle product status
   const toggleStatus = (id) =>
-    updateProducts((prev) =>
-      prev.map((product) =>
-        product.id === id ? { ...product, status: !product.status } : product
-      )
-    );
+    updateProducts((prev) => prev.map((p) => (p.id === id ? { ...p, status: !p.status } : p)));
 
-  // Truncate text utility function
   const truncateText = (text, limit = 5) =>
     text.split(' ').slice(0, limit).join(' ') + (text.split(' ').length > limit ? '...' : '');
 
-  // Handle product deletion
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this product?");
-    if (confirmDelete) {
-      const updatedProducts = products.filter((product) => product.id !== id);
-      updateProducts(updatedProducts); // Update context
-    }
-  };
+  const handleDelete = (id) =>
+    window.confirm('Are you sure you want to delete this product?') &&
+    updateProducts(products.filter((p) => p.id !== id));
+
+  const navigateToAddProduct = () => navigate('/addproduct', { state: { categoryId } });
+
+  const navigateToUpdateProduct = (id, product) =>
+    navigate('/updateproduct', { state: { productId: id, product, categoryId } });
+
+  const tableHeaders = [
+    'Image',
+    'Name',
+    'Description',
+    'Price (₹)',
+    'Stock',
+    'Sales (₹)',
+    'Status',
+    'Actions',
+  ];
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -43,7 +46,7 @@ const ProductsList = () => {
         <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800">Products List</h1>
           <button
-            onClick={() => navigate('/addproduct', { state: { categoryId } })}
+            onClick={navigateToAddProduct}
             className="bg-purple-600 text-white px-4 py-2 rounded-md flex items-center gap-2 shadow-md hover:bg-purple-700"
           >
             <svg
@@ -63,19 +66,8 @@ const ProductsList = () => {
           <table className="min-w-full text-sm text-gray-600">
             <thead className="bg-gray-300 text-gray-700">
               <tr>
-                {[
-                  'Image',
-                  'Name',
-                  'Description',
-                  'Price (₹)',
-                  'Stock',
-                  'Sales (₹)',
-                  'Status',
-                  'Actions',
-                ].map((h) => (
-                  <th key={h} className="px-4 py-3 text-center font-semibold whitespace-nowrap">
-                    {h}
-                  </th>
+                {tableHeaders.map((h) => (
+                  <th key={h} className="px-4 py-3 text-center font-semibold whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -85,35 +77,35 @@ const ProductsList = () => {
                   <td colSpan="8" className="text-center px-4 py-3">No products found for this category.</td>
                 </tr>
               ) : (
-                filteredProducts.map(({ id, image, name, description, price, stock, sales, status }) => (
-                  <tr key={id} className="hover:bg-gray-100">
-                    <td className="px-4 py-3 text-center">
-                      <img src={image} alt={name} className="w-10 h-10 rounded-md mx-auto" />
-                    </td>
-                    <td className="px-4 py-3 text-center font-medium">{name}</td>
-                    <td className="px-4 py-3 text-center">{truncateText(description)}</td>
-                    <td className="px-4 py-3 text-center">{price}</td>
-                    <td className="px-4 py-3 text-center">{stock}</td>
-                    <td className="px-4 py-3 text-center">{sales}</td>
+                filteredProducts.map((p) => (
+                  <tr key={p.id} className="hover:bg-gray-100">
+                    <td className="px-4 py-3 text-center"><img src={p.image} alt={p.name} className="w-10 h-10 rounded-md mx-auto" /></td>
+                    <td className="px-4 py-3 text-center font-medium">{p.name}</td>
+                    <td className="px-4 py-3 text-center">{truncateText(p.description)}</td>
+                    <td className="px-4 py-3 text-center">{p.price}</td>
+                    <td className="px-4 py-3 text-center">{p.stock}</td>
+                    <td className="px-4 py-3 text-center">{p.sales}</td>
                     <td className="px-4 py-3 text-center">
                       <button
-                        onClick={() => toggleStatus(id)}
-                        className={`w-10 h-5 rounded-full flex items-center mx-auto ${status ? 'bg-green-500' : 'bg-gray-300'}`}
+                        onClick={() => toggleStatus(p.id)}
+                        className={`w-10 h-5 rounded-full flex items-center mx-auto ${p.status ? 'bg-green-500' : 'bg-gray-300'}`}
                       >
                         <span
-                          className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${status ? 'translate-x-5' : 'translate-x-0'
-                            }`}
+                          className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${p.status ? 'translate-x-5' : 'translate-x-0'}`}
                         />
                       </button>
                     </td>
                     <td className="px-4 py-3 text-center">
                       <div className="flex gap-3 justify-center">
-                        <button className="text-blue-500 hover:text-blue-700">
+                        <button
+                          className="text-blue-500 hover:text-blue-700"
+                          onClick={() => navigateToUpdateProduct(p.id, p)}
+                        >
                           <FaEdit size={18} />
                         </button>
                         <button
                           className="text-red-500 hover:text-red-700"
-                          onClick={() => handleDelete(id)}
+                          onClick={() => handleDelete(p.id)}
                         >
                           <FaTrash size={18} />
                         </button>
@@ -123,7 +115,6 @@ const ProductsList = () => {
                 ))
               )}
             </tbody>
-
           </table>
         </div>
       </div>
