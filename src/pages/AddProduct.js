@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Header from '../components/Header';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ProductsContext } from '../context/ProductsContext'; // Adjust import based on your file structure
 
 const InputField = ({ id, label, type, placeholder, value, error, onChange }) => (
   <div>
@@ -17,9 +19,17 @@ const InputField = ({ id, label, type, placeholder, value, error, onChange }) =>
   </div>
 );
 
+
+
 const AddProduct = () => {
   const [formData, setFormData] = useState({ name: '', description: '', price: '', stock: '', imageUrl: '' });
   const [errors, setErrors] = useState({});
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { categoryId } = location.state || {};
+
+  console.log(categoryId)
+  const { products, updateProducts } = useContext(ProductsContext);
 
   const validateForm = () => {
     const newErrors = {};
@@ -40,8 +50,25 @@ const AddProduct = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) console.log('Product Created:', formData);
-  };
+    if (validateForm()) {
+      const newProduct = {
+        id: products.length + 1, // Generate new ID
+        ...formData,
+        price: Number(formData.price),
+        stock: Number(formData.stock),
+        image:formData.imageUrl,
+        categoryId:categoryId, 
+        status:true,
+        sales: 0
+      };
+  
+      if (window.confirm('Are you sure you want to add this product?')) {
+        updateProducts((prevProducts) => [...prevProducts, newProduct]);
+        // Pass categoryId when navigating back to ProductsList
+        navigate('/productlist', { state: { categoryId } });
+      }
+    }
+  };  
 
   return (
     <div className="bg-gray-50 min-h-screen">
