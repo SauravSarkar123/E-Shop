@@ -1,11 +1,8 @@
 import React, { createContext, useState } from 'react';
 
-// Create the context
 export const CategoriesContext = createContext();
 
-// Provider component
 export const CategoriesProvider = ({ children }) => {
-  // Dynamic categories data
   const [categories, setCategories] = useState([
     {
       id: 1,
@@ -24,10 +21,7 @@ export const CategoriesProvider = ({ children }) => {
     },
   ]);
 
-  // Function to dynamically update categories
-  const updateCategories = (newCategories) => {
-    setCategories(newCategories);
-  };
+  const updateCategories = (newCategories) => setCategories(newCategories);
 
   return (
     <CategoriesContext.Provider value={{ categories, updateCategories }}>

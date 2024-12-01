@@ -1,7 +1,7 @@
-// App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { CategoriesProvider } from './context/CategoriesContext'; // Import the context provider
+import { CategoriesProvider } from './context/CategoriesContext'; // Import CategoriesContext
+import { ProductsProvider } from './context/ProductsContext'; // Import ProductsContext
 import HomePage from './pages/HomePage';
 import ProductListing from './pages/ProductListing';
 import ProductInfo from './pages/ProductInfo';
@@ -17,25 +17,25 @@ import './App.css';
 
 function App() {
   return (
-    // Wrap the application with CategoriesProvider
+    // Wrap with both CategoriesProvider and ProductsProvider
     <CategoriesProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/products" element={<ProductListing />} />
-          <Route path="/productinfo" element={<ProductInfo />} />
-          <Route path="/cart" element={<CartItems />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/categorylist" element={<CategoriesPage />} />
-          <Route path="/productlist" element={<ProductsList />} />
-          <Route path="/addcategory" element={<AddCategory />} />
-          <Route path="/updatecategory" element={<UpdateCategory />} />
-          <Route path="/addproduct" element={<AddProduct />} />
-          <Route path="/updateproduct" element={<UpdateProduct />} />
-
-
-        </Routes>
-      </Router>
+      <ProductsProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/products" element={<ProductListing />} />
+            <Route path="/productinfo" element={<ProductInfo />} />
+            <Route path="/cart" element={<CartItems />} />
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/categorylist" element={<CategoriesPage />} />
+            <Route path="/productlist" element={<ProductsList />} />
+            <Route path="/addcategory" element={<AddCategory />} />
+            <Route path="/updatecategory" element={<UpdateCategory />} />
+            <Route path="/addproduct" element={<AddProduct />} />
+            <Route path="/updateproduct" element={<UpdateProduct />} />
+          </Routes>
+        </Router>
+      </ProductsProvider>
     </CategoriesProvider>
   );
 }
