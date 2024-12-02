@@ -60,41 +60,42 @@ const ProductListing = () => {
                   alt={product.name}
                   className="rounded-md w-full h-32 object-cover mb-3"
                 />
-                <h2 className="text-sm font-semibold text-gray-800 mb-1">{product.name}</h2>
-                <p className="text-sm text-gray-600 mb-2">Rs. {product.price}</p>
+                <h2 className="text-lg font-semibold text-gray-800 mb-1">{product.name}</h2>
+                <p className="text-md text-gray-600 mb-2">Rs. {product.price}</p>
                 <p className="text-xs text-gray-500 mb-2">Stock: {product.stock}</p>
-                {cart[product.id] ? (
-                  <div className="flex items-center space-x-4 mt-auto">
-                    <button
-                      onClick={(e) =>
-                        handleUpdateQuantity(e, product.id, cart[product.id].quantity - 1, product.stock)
-                      }
-                      className="w-10 h-10 bg-red-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-red-600"
-                    >
-                      -
-                    </button>
-                    <div className="w-16 h-10 bg-gray-200 rounded-md flex items-center justify-center border border-gray-300">
-                      {cart[product.id].quantity}
+                <div className="flex flex-col flex-grow justify-end">
+                  {cart[product.id] ? (
+                    <div className="flex items-center justify-center space-x-4 mt-auto">
+                      <button
+                        onClick={(e) =>
+                          handleUpdateQuantity(e, product.id, cart[product.id].quantity - 1, product.stock)
+                        }
+                        className="w-10 h-10 bg-red-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-red-600"
+                      >
+                        -
+                      </button>
+                      <div className="w-24 h-10 bg-gray-200 rounded-md flex items-center justify-center border border-gray-300">
+                        {cart[product.id].quantity}
+                      </div>
+                      <button
+                        onClick={(e) =>
+                          handleUpdateQuantity(e, product.id, cart[product.id].quantity + 1, product.stock)
+                        }
+                        className="w-10 h-10 bg-green-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-green-600 disabled:opacity-50"
+                        disabled={cart[product.id].quantity >= product.stock}
+                      >
+                        +
+                      </button>
                     </div>
+                  ) : (
                     <button
-                      onClick={(e) =>
-                        handleUpdateQuantity(e, product.id, cart[product.id].quantity + 1, product.stock)
-                      }
-                      className="w-10 h-10 bg-green-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-green-600 disabled:opacity-50"
-                      disabled={cart[product.id].quantity >= product.stock} // Add this line
+                      onClick={(e) => handleAddToCart(e, product)}
+                      className="px-4 py-2 bg-purple-500 text-white font-bold rounded-md hover:bg-purple-600 mt-auto flex items-center justify-center"
                     >
-                      +
+                      Add to Cart
                     </button>
-
-                  </div>
-                ) : (
-                  <button
-                    onClick={(e) => handleAddToCart(e, product)}
-                    className="px-4 py-2 bg-purple-500 text-white font-bold rounded-md hover:bg-purple-600 mt-auto"
-                  >
-                    Add to Cart
-                  </button>
-                )}
+                  )}
+                </div>
               </div>
             ))}
           </div>
