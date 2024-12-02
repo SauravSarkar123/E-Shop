@@ -16,6 +16,11 @@ function Header() {
       navigate('/cart'); // Navigate to /cart only if not already there
     }
   };
+  const handleSettingsClick = () => {
+    if (location.pathname !== '/categorylist') {
+      navigate('/categorylist'); // Navigate to /cart only if not already there
+    }
+  };
 
   return (
     <header className="bg-blue-600 text-white shadow-md">
@@ -41,7 +46,10 @@ function Header() {
           </button>
 
           {/* Settings Icon */}
-          <button className="hover:text-blue-200 transition duration-200">
+          <button
+            className="hover:text-blue-200 transition duration-200"
+            onClick={handleSettingsClick}
+          >
             <FaCog size={20} />
           </button>
         </div>

@@ -61,66 +61,77 @@ const CategoriesPage = () => {
               </tr>
             </thead>
             <tbody>
-              {categories.map(({ id, image, name, status }) => {
-                const { totalStock, totalSales } = getCategoryStats(id);
-                return (
-                  <tr
-                    key={id}
-                    className="hover:bg-gray-100 transition-colors cursor-pointer"
-                    onClick={() => navigate('/productlist', { state: { categoryId: id } })}
+              {categories.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-4 py-6 text-center text-gray-500 font-medium"
                   >
-                    <td className="px-4 py-3 text-center">
-                      <img
-                        src={image}
-                        alt={name}
-                        className="w-10 h-10 rounded-md object-cover mx-auto"
-                      />
-                    </td>
-                    <td className="px-4 py-3 text-center font-medium">{name}</td>
-                    <td className="px-4 py-3 text-center">{totalStock}</td>
-                    <td className="px-4 py-3 text-center">₹ {totalSales.toLocaleString()}</td>
-                    <td className="px-4 py-3 text-center">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleStatus(id);
-                        }}
-                        className={`w-10 h-5 rounded-full flex items-center mx-auto ${
-                          status ? 'bg-green-500' : 'bg-gray-300'
-                        }`}
-                      >
-                        <span
-                          className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
-                            status ? 'translate-x-5' : 'translate-x-0'
-                          }`}
+                    No categories available.
+                  </td>
+                </tr>
+              ) : (
+                categories.map(({ id, image, name, status }) => {
+                  const { totalStock, totalSales } = getCategoryStats(id);
+                  return (
+                    <tr
+                      key={id}
+                      className="hover:bg-gray-100 transition-colors cursor-pointer"
+                      onClick={() => navigate('/productlist', { state: { categoryId: id } })}
+                    >
+                      <td className="px-4 py-3 text-center">
+                        <img
+                          src={image}
+                          alt={name}
+                          className="w-10 h-10 rounded-md object-cover mx-auto"
                         />
-                      </button>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <div className="flex gap-3 justify-center">
+                      </td>
+                      <td className="px-4 py-3 text-center font-medium">{name}</td>
+                      <td className="px-4 py-3 text-center">{totalStock}</td>
+                      <td className="px-4 py-3 text-center">₹ {totalSales.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-center">
                         <button
-                          className="text-blue-500 hover:text-blue-700"
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleEdit({ id, image, name, stock: totalStock, sales: totalSales, status });
+                            toggleStatus(id);
                           }}
+                          className={`w-10 h-5 rounded-full flex items-center mx-auto ${
+                            status ? 'bg-green-500' : 'bg-gray-300'
+                          }`}
                         >
-                          <FaEdit size={18} />
+                          <span
+                            className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
+                              status ? 'translate-x-5' : 'translate-x-0'
+                            }`}
+                          />
                         </button>
-                        <button
-                          className="text-red-500 hover:text-red-700"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteCategory(id);
-                          }}
-                        >
-                          <FaTrash size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <div className="flex gap-3 justify-center">
+                          <button
+                            className="text-blue-500 hover:text-blue-700"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEdit({ id, image, name, stock: totalStock, sales: totalSales, status });
+                            }}
+                          >
+                            <FaEdit size={18} />
+                          </button>
+                          <button
+                            className="text-red-500 hover:text-red-700"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteCategory(id);
+                            }}
+                          >
+                            <FaTrash size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
