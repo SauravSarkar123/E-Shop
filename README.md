@@ -1,5 +1,5 @@
 ## Live Demo
-[View the live application here](https://e-shop-six-black.vercel.app/)
+[E-Shop Website](https://e-shop-six-black.vercel.app/)
 
 
 
