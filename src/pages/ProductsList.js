@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { ProductsContext } from '../context/ProductsContext';
@@ -7,6 +7,20 @@ const ProductsList = () => {
   const { state } = useLocation(), { categoryId } = state || {};
   const { products, updateProducts } = useContext(ProductsContext);
   const navigate = useNavigate();
+
+  // Redirect back navigation to /categorylist
+  useEffect(() => {
+    const handlePopState = (event) => {
+      event.preventDefault(); // Prevent default browser back navigation
+      navigate('/categorylist'); // Redirect to /categorylist
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState); // Cleanup the listener
+    };
+  }, [navigate]);
 
   const filteredProducts = categoryId
     ? products.filter((p) => p.categoryId === Number(categoryId))

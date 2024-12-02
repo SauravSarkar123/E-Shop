@@ -1,13 +1,26 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { CategoriesContext } from '../context/CategoriesContext';
 import { ProductsContext } from '../context/ProductsContext';
-import { useNavigate } from 'react-router-dom';
 
 const CategoriesPage = () => {
   const { categories, updateCategories } = useContext(CategoriesContext);
   const { products } = useContext(ProductsContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      // Always redirect to /categorylist on back/forward button press
+      navigate('/categorylist');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [navigate]);
 
   const toggleStatus = (id) =>
     updateCategories(categories.map((cat) => (cat.id === id ? { ...cat, status: !cat.status } : cat)));
