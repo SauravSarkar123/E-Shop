@@ -15,9 +15,15 @@ const CartItems = () => {
   const handleUpdateQuantity = (productId, newQuantity) => {
     const product = products.find((p) => p.id === parseInt(productId));
     if (!product) return;
-    if (newQuantity <= 0) alert(`${product.name} cannot have a quantity less than 1.`);
-    else updateQuantity(productId, newQuantity);
+  
+    // If the quantity becomes 0 or less, remove the item from the cart
+    if (newQuantity <= 0) {
+      updateQuantity(productId, 0); // Remove the item from the cart
+    } else {
+      updateQuantity(productId, newQuantity); // Update the quantity normally
+    }
   };
+  
 
   const handlePlaceOrder = () => {
     if (!Object.keys(cart).length) return alert('Your cart is empty!');
