@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 import { CategoriesContext } from '../context/CategoriesContext'; // Import the context
 
 const InputField = ({ id, label, type, placeholder, value, error, onChange }) => (
@@ -64,7 +63,6 @@ const UpdateCategory = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-8 md:max-w-lg">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Update Category</h1>
         <form onSubmit={handleFormSubmit} className="space-y-6">

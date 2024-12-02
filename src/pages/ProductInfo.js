@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Header from '../components/Header';
 import { ProductsContext } from '../context/ProductsContext';
 import { CategoriesContext } from '../context/CategoriesContext';
 import { CartContext } from '../context/CartContext';
@@ -23,7 +22,6 @@ const ProductInfo = () => {
   if (!product) {
     return (
       <div className="bg-gray-100 min-h-screen">
-        <Header />
         <div className="container mx-auto px-4 py-6 text-center">
           <h1 className="text-2xl font-bold text-red-500">Product not found!</h1>
         </div>
@@ -37,7 +35,6 @@ const ProductInfo = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-6 space-y-6">
         <h1 className="text-2xl font-bold text-black">
           {categoryName} / {product.name}

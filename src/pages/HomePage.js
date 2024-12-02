@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 import { CategoriesContext } from '../context/CategoriesContext';
 
 const HomePage = () => {
@@ -13,7 +12,6 @@ const HomePage = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold text-left text-gray-800 mb-6">Categories</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

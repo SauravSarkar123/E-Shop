@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header';
 import { CartContext } from '../context/CartContext';
 import { useOrders } from '../context/OrdersContext';
 import { ProductsContext } from '../context/ProductsContext';
@@ -46,7 +45,6 @@ const CartItems = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold text-black mb-6">Cart Items</h1>
         {Object.keys(cart).length ? (

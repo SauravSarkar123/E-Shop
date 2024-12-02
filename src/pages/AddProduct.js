@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import Header from '../components/Header';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ProductsContext } from '../context/ProductsContext'; // Adjust import based on your file structure
 
@@ -72,7 +71,6 @@ const AddProduct = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-8 md:max-w-lg">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Add Product</h1>
         <form onSubmit={handleFormSubmit} className="space-y-6">

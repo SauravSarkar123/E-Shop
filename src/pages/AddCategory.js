@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { CategoriesContext } from '../context/CategoriesContext'; // Adjust path as needed
-import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 const InputField = ({ id, label, type, placeholder, value, error, onChange }) => (
   <div>
@@ -59,7 +58,6 @@ const AddCategory = () => {
   }
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-8 md:max-w-lg">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">Add Category</h1>
         <form onSubmit={handleFormSubmit} className="space-y-6">

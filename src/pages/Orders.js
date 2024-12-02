@@ -1,5 +1,4 @@
 import React from 'react';
-import Header from '../components/Header';
 import { useOrders } from '../context/OrdersContext'; // Import useOrders
 
 const OrdersPage = () => {
@@ -7,7 +6,6 @@ const OrdersPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-8">Orders</h1>
         

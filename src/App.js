@@ -15,6 +15,7 @@ import AddCategory from './pages/AddCategory';
 import UpdateCategory from './pages/UpdateCategory';
 import AddProduct from './pages/AddProduct';
 import UpdateProduct from './pages/UpdateProduct';
+import Layout from './components/Layout';
 import './App.css';
 
 function App() {
@@ -24,19 +25,21 @@ function App() {
         <CartProvider>
           <OrdersProvider> {/* Wrap with CartProvider */}
             <Router>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/products" element={<ProductListing />} />
-                <Route path="/productinfo" element={<ProductInfo />} />
-                <Route path="/cart" element={<CartItems />} />
-                <Route path="/orders" element={<OrdersPage />} />
-                <Route path="/categorylist" element={<CategoriesPage />} />
-                <Route path="/productlist" element={<ProductsList />} />
-                <Route path="/addcategory" element={<AddCategory />} />
-                <Route path="/updatecategory" element={<UpdateCategory />} />
-                <Route path="/addproduct" element={<AddProduct />} />
-                <Route path="/updateproduct" element={<UpdateProduct />} />
-              </Routes>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/products" element={<ProductListing />} />
+                  <Route path="/productinfo" element={<ProductInfo />} />
+                  <Route path="/cart" element={<CartItems />} />
+                  <Route path="/orders" element={<OrdersPage />} />
+                  <Route path="/categorylist" element={<CategoriesPage />} />
+                  <Route path="/productlist" element={<ProductsList />} />
+                  <Route path="/addcategory" element={<AddCategory />} />
+                  <Route path="/updatecategory" element={<UpdateCategory />} />
+                  <Route path="/addproduct" element={<AddProduct />} />
+                  <Route path="/updateproduct" element={<UpdateProduct />} />
+                </Routes>
+              </Layout>
             </Router>
           </OrdersProvider>
         </CartProvider>

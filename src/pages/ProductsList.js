@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import Header from '../components/Header';
 import { ProductsContext } from '../context/ProductsContext';
 
 const ProductsList = () => {
@@ -41,7 +40,6 @@ const ProductsList = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
           <h1 className="text-xl md:text-2xl font-bold text-gray-800">Products List</h1>

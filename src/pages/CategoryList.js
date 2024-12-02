@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import Header from '../components/Header';
 import { CategoriesContext } from '../context/CategoriesContext';
 import { ProductsContext } from '../context/ProductsContext';
 import { useNavigate } from 'react-router-dom';
@@ -11,9 +10,7 @@ const CategoriesPage = () => {
   const navigate = useNavigate();
 
   const toggleStatus = (id) =>
-    updateCategories(
-      categories.map((cat) => (cat.id === id ? { ...cat, status: !cat.status } : cat))
-    );
+    updateCategories(categories.map((cat) => (cat.id === id ? { ...cat, status: !cat.status } : cat)));
 
   const deleteCategory = (id) => {
     if (window.confirm('Are you sure you want to delete this category?'))
@@ -22,22 +19,19 @@ const CategoriesPage = () => {
 
   const handleEdit = (category) => navigate('/updatecategory', { state: { category } });
 
-  // Calculate combined stock and sales for each category
   const getCategoryStats = (categoryId) => {
-    const filteredProducts = products.filter((product) => product.categoryId === categoryId);
-    const totalStock = filteredProducts.reduce((acc, product) => acc + product.stock, 0);
-    const totalSales = filteredProducts.reduce((acc, product) => acc + product.sales, 0);
-    return { totalStock, totalSales };
+    const filteredProducts = products.filter((p) => p.categoryId === categoryId);
+    return {
+      totalStock: filteredProducts.reduce((acc, p) => acc + p.stock, 0),
+      totalSales: filteredProducts.reduce((acc, p) => acc + p.sales, 0),
+    };
   };
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Header />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <h1 className="text-2xl font-bold text-gray-800 text-center sm:text-left">
-            Categories List
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">Categories List</h1>
           <button
             className="bg-purple-600 text-white px-4 py-2 rounded-md flex items-center gap-2 shadow-md hover:bg-purple-700 transition"
             onClick={() => navigate('/addcategory')}
@@ -99,7 +93,7 @@ const CategoriesPage = () => {
                           className={`w-5 h-5 bg-white rounded-full shadow-md transform transition-transform ${
                             status ? 'translate-x-5' : 'translate-x-0'
                           }`}
-                        ></span>
+                        />
                       </button>
                     </td>
                     <td className="px-4 py-3 text-center">
