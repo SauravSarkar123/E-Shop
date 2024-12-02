@@ -51,16 +51,20 @@ const UpdateCategory = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const updatedCategories = categories.map((category) =>
-        category.id === formData.id
-          ? { ...category, name: formData.name, image: formData.imageUrl }
-          : category
+      const confirmation = window.confirm(
+        "Are you sure you want to update this category?"
       );
-      updateCategories(updatedCategories); // Update the context
-      navigate('/categorylist'); // Navigate back to the categories page after updating
+      if (confirmation) {
+        const updatedCategories = categories.map((category) =>
+          category.id === formData.id
+            ? { ...category, name: formData.name, image: formData.imageUrl }
+            : category
+        );
+        updateCategories(updatedCategories); // Update the context
+        navigate('/categorylist'); // Navigate back to the categories page after updating
+      }
     }
   };
-
   return (
     <div className="bg-gray-50 min-h-screen">
       <div className="container mx-auto px-4 py-8 md:max-w-lg">

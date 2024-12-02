@@ -21,12 +21,17 @@ function Header() {
       navigate('/categorylist'); // Navigate to /cart only if not already there
     }
   };
+  const handleLogoClick = () => {
+    if (location.pathname !== '/') {
+      navigate('/'); // Navigate to the home page
+    }
+  };
 
   return (
     <header className="bg-blue-600 text-white shadow-md">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* Logo */}
-        <div className="text-2xl font-bold flex items-center">
+        <div className="text-2xl font-bold flex items-center cursor-pointer" onClick={handleLogoClick}>
           <span>LOGO</span>
         </div>
 

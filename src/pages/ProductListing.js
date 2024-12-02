@@ -80,10 +80,12 @@ const ProductListing = () => {
                       onClick={(e) =>
                         handleUpdateQuantity(e, product.id, cart[product.id].quantity + 1, product.stock)
                       }
-                      className="w-10 h-10 bg-green-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-green-600"
+                      className="w-10 h-10 bg-green-500 text-white text-lg font-bold rounded-md flex items-center justify-center hover:bg-green-600 disabled:opacity-50"
+                      disabled={cart[product.id].quantity >= product.stock} // Add this line
                     >
                       +
                     </button>
+
                   </div>
                 ) : (
                   <button

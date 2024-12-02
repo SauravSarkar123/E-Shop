@@ -35,8 +35,8 @@ const CategoriesPage = () => {
   const getCategoryStats = (categoryId) => {
     const filteredProducts = products.filter((p) => p.categoryId === categoryId);
     return {
-      totalStock: filteredProducts.reduce((acc, p) => acc + p.stock, 0),
-      totalSales: filteredProducts.reduce((acc, p) => acc + p.sales, 0),
+      totalStock: filteredProducts.reduce((acc, p) => acc + (p.stock || 0), 0), // Safeguard against undefined stock
+      totalSales: filteredProducts.reduce((acc, p) => acc + (p.sales || 0), 0), // Safeguard against undefined sales
     };
   };
 
