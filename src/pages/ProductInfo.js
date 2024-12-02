@@ -3,12 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { ProductsContext } from '../context/ProductsContext';
 import { CategoriesContext } from '../context/CategoriesContext';
-import { CartContext } from '../context/CartContext'; // Import CartContext
+import { CartContext } from '../context/CartContext';
 
 const ProductInfo = () => {
   const { products } = useContext(ProductsContext);
   const { categories } = useContext(CategoriesContext);
-  const { cart, addToCart, updateQuantity } = useContext(CartContext); // Use CartContext
+  const { cart, addToCart, updateQuantity } = useContext(CartContext);
   const [searchParams] = useSearchParams();
   const productName = searchParams.get('name');
   const [product, setProduct] = useState(null);
@@ -52,10 +52,13 @@ const ProductInfo = () => {
             <h2 className="text-2xl font-bold text-gray-800">{product.name}</h2>
             <p className="text-gray-600">{product.description}</p>
             <p className="text-lg font-semibold text-gray-700">Rs. {product.price}</p>
+            <p className="text-sm text-gray-500">Stock available: {product.stock}</p>
             {cart[product.id] ? (
               <div className="flex items-center space-x-4">
                 <button
-                  onClick={() => updateQuantity(product.id, cart[product.id].quantity - 1)} // Decrease quantity
+                  onClick={() =>
+                    updateQuantity(product.id, Math.max(cart[product.id].quantity - 1, 0))
+                  }
                   className="w-10 h-10 bg-red-500 text-white font-bold rounded-md hover:bg-red-600"
                 >
                   -
@@ -64,16 +67,28 @@ const ProductInfo = () => {
                   {cart[product.id].quantity}
                 </span>
                 <button
-                  onClick={() => updateQuantity(product.id, cart[product.id].quantity + 1)} // Increase quantity
-                  className="w-10 h-10 bg-green-500 text-white font-bold rounded-md hover:bg-green-600"
+                  onClick={() => {
+                    if (cart[product.id].quantity < product.stock) {
+                      updateQuantity(product.id, cart[product.id].quantity + 1);
+                    }
+                  }}
+                  className={`w-10 h-10 ${
+                    cart[product.id].quantity < product.stock ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-300'
+                  } text-white font-bold rounded-md`}
+                  disabled={cart[product.id].quantity >= product.stock}
                 >
                   +
                 </button>
               </div>
             ) : (
               <button
-                onClick={() => addToCart(product)} // Add to cart
-                className="px-6 py-3 bg-purple-500 text-white font-bold rounded-md hover:bg-purple-600"
+                onClick={() => {
+                  if (product.stock > 0) addToCart(product);
+                }}
+                className={`px-6 py-3 ${
+                  product.stock > 0 ? 'bg-purple-500 hover:bg-purple-600' : 'bg-gray-300'
+                } text-white font-bold rounded-md`}
+                disabled={product.stock <= 0}
               >
                 Add to Cart
               </button>
